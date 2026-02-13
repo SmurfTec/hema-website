@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRightIcon, Loader2, MoveRight } from "lucide-react";
 import { useState, useTransition } from "react";
 
 export function Hero() {
@@ -36,7 +37,7 @@ export function Hero() {
   return (
     <>
       <section className="relative w-full px-8 md:px-16 pt-32 pb-20 md:pt-40 md:pb-32 min-h-screen flex items-center overflow-hidden">
-        <div className="absolute inset-0 w-full h-full bg-black/30 z-10"/>
+        <div className="absolute inset-0 w-full h-full bg-black/10 z-10" />
         {/* Background Video - plays once */}
         <div className="absolute inset-0 w-full h-full">
           <video
@@ -52,37 +53,35 @@ export function Hero() {
           </video>
         </div>
 
-        {/* Content overlay */}
-        <div className="relative z-10 max-w-[1200px] mx-auto flex flex-col items-center text-center w-full">
-          <h1 className="font-playfair text-[64px] md:text-[80px] lg:text-[92px] leading-[1.05] tracking-tight text-white mb-10">
-            Design the Future of
-            <br />
-            Intelligent Spaces
-          </h1>
+        <div className="absolute bottom-0 left-0 right-0 w-full font-bold font-inter text-8xl md:text-9xl text-white flex items-center justify-between gap-4">
+          <span>
+            H</ span><span>E</span><span>M</span><span>A</span>
+          </div>
 
+        {/* Content overlay */}
+        <div className="relative z-10 max-w-[1200px] mx-auto flex flex-col items-center text-center w-full py-20">
           <form onSubmit={handleSubmit} className="w-full max-w-[520px] mb-3">
-            <div className="flex flex-col md:flex-row gap-3">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                className="flex-1 h-12 py-3 px-5 bg-white border border-[#D8D6D1] rounded-[6px] text-white placeholder:text-[#6C6C6C] focus:outline-none focus:border-[#1A1A1A] transition-colors"
-              />
-              <button
-                type="submit"
-                disabled={isPending}
-                className="h-12 px-8 bg-[#1A1A1A] text-white rounded-[6px] hover:bg-[#2A2A2A] transition-colors duration-200 disabled:opacity-70"
-              >
-                {isPending ? "Joining..." : "Join The Waitlist"}
-              </button>
+            <div className="flex flex-col gap-3">
+              <p className="text-lg md:text-xl lg:text-2xl text-white font-bold font-inter">Join The Waitlist</p>
+              <div className="relative flex-1 h-12 py-3 px-5 bg-white border border-[#D8D6D1] rounded-[6px]">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  className="font-inter h-full w-full placeholder:text-[#C30101] text-[#C30101] focus:outline-none focus:border-[#1A1A1A] transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="absolute right-3 top-0 h-full transition-colors duration-200 disabled:opacity-70"
+                >
+                  {isPending ? <Loader2 className="size-6 text-[#C30101]" /> : <MoveRight className="size-6 text-[#C30101]" />}
+                </button>
+              </div>
             </div>
           </form>
-
-          <p className="text-sm text-white">
-            We'll share early access when we launch.
-          </p>
         </div>
       </section>
 
