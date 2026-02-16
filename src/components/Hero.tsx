@@ -53,7 +53,7 @@ export function Hero() {
           </video>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 w-full font-bold font-inter text-8xl md:text-9xl text-white flex items-center justify-between gap-4">
+        <div className="absolute bottom-0 left-0 right-0 w-full font-bold font-inter text-8xl md:text-9xl lg:text-[160px] text-white flex items-center justify-between gap-4">
           <span>
             H</ span><span>E</span><span>M</span><span>A</span>
           </div>
@@ -77,7 +77,7 @@ export function Hero() {
                   disabled={isPending}
                   className="absolute right-3 top-0 h-full transition-colors duration-200 disabled:opacity-70"
                 >
-                  {isPending ? <Loader2 className="size-6 text-[#C30101]" /> : <MoveRight className="size-6 text-[#C30101]" />}
+                  {isPending ? <Loader2 className="size-6 text-[#C30101] animate-spin duration-200" /> : <MoveRight className="size-6 text-[#C30101]" />}
                 </button>
               </div>
             </div>
