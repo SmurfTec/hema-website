@@ -1,13 +1,36 @@
 "use client";
 
 import { ArrowRightIcon, Loader2, MoveRight } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 
 export function Hero() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  const ref = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+
+    // iOS Safari sometimes needs an explicit play() call
+    const tryPlay = async () => {
+      try {
+        await v.play();
+      } catch {
+        // Autoplay might be blocked; we silently ignore and rely on poster/fallback
+      }
+    };
+
+    // Try immediately and after metadata loads
+    tryPlay();
+    const onLoaded = () => tryPlay();
+    v.addEventListener("loadedmetadata", onLoaded);
+
+    return () => v.removeEventListener("loadedmetadata", onLoaded);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,31 +61,46 @@ export function Hero() {
     <>
       <section className="relative w-full px-8 md:px-16 pt-32 pb-20 md:pt-40 md:pb-32 min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0 w-full h-full bg-black/10 z-10" />
-        {/* Background Video - plays once */}
         <div className="absolute inset-0 w-full h-full">
           <video
+            ref={ref}
             autoPlay
             muted
             playsInline
-            className="w-full h-full object-cover"
-            style={{
-              pointerEvents: "none",
+            preload="auto"
+            className="h-full w-full object-cover"
+            style={{ pointerEvents: "none" }}
+            poster="/hero-poster.jpg"
+            controls={false}
+            disableRemotePlayback={true}
+            disablePictureInPicture={true}
+            onEnded={(e) => {
+              const v = e.currentTarget;
+              v.pause();
+              v.currentTime = v.duration;
             }}
           >
-            <source src="/hero.mp4" type="video/mp4" />
+            <source
+              src="/hero.mp4"
+              type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'
+            />
           </video>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 w-full font-bold font-inter text-8xl md:text-9xl lg:text-[160px] text-white flex items-center justify-between gap-4">
-          <span>
-            H</ span><span>E</span><span>M</span><span>A</span>
-          </div>
+          <span>H</span>
+          <span>E</span>
+          <span>M</span>
+          <span>A</span>
+        </div>
 
         {/* Content overlay */}
         <div className="relative z-10 max-w-[1200px] mx-auto flex flex-col items-center text-center w-full py-20">
           <form onSubmit={handleSubmit} className="w-full max-w-[520px] mb-3">
             <div className="flex flex-col gap-3">
-              <p className="text-lg md:text-xl lg:text-2xl text-white font-bold font-inter">Join The Waitlist</p>
+              <p className="text-lg md:text-xl lg:text-2xl text-white font-bold font-inter">
+                Join The Waitlist
+              </p>
               <div className="relative flex-1 h-12 py-3 px-5 bg-white border border-[#D8D6D1] rounded-[6px]">
                 <input
                   type="email"
@@ -77,7 +115,11 @@ export function Hero() {
                   disabled={isPending}
                   className="absolute right-3 top-0 h-full transition-colors duration-200 disabled:opacity-70"
                 >
-                  {isPending ? <Loader2 className="size-6 text-[#C30101] animate-spin duration-200" /> : <MoveRight className="size-6 text-[#C30101]" />}
+                  {isPending ? (
+                    <Loader2 className="size-6 text-[#C30101] animate-spin duration-200" />
+                  ) : (
+                    <MoveRight className="size-6 text-[#C30101]" />
+                  )}
                 </button>
               </div>
             </div>
